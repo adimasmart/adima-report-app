@@ -1,2 +1,1576 @@
-# adima-report-app
-INSTALLATION, COMMISSIONING AND WORK COMPLETION REPORT
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADIMA SMART SECURE IOT DEVICES - INSTALLATION, COMMISSIONING AND WORK COMPLETION REPORT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+        }
+        .container {
+            max-width: 90%; /* Fluid width */
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background-color: #ffffff;
+            border-radius: 12px; /* More rounded corners */
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); /* Softer shadow */
+        }
+        input[type="text"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1; /* Light gray border */
+            border-radius: 8px; /* Slightly more rounded inputs */
+            font-size: 1rem;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        textarea:focus {
+            border-color: #3b82f6; /* Blue focus border */
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); /* Light blue glow on focus */
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b; /* Darker text for titles */
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e2e8f0; /* Subtle separator */
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+        }
+        .btn-primary {
+            background-color: #3b82f6; /* Blue button */
+            color: #ffffff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb; /* Darker blue on hover */
+            transform: translateY(-1px); /* Slight lift effect */
+        }
+        .btn-secondary {
+            background-color: #64748b; /* Gray button */
+            color: #ffffff;
+            border: none;
+        }
+        .btn-secondary:hover {
+            background-color: #475569; /* Darker gray on hover */
+            transform: translateY(-1px);
+        }
+        .btn-gemini {
+            background-color: #f97316; /* Orange button for Gemini features */
+            color: #ffffff;
+            border: none;
+        }
+        .btn-gemini:hover {
+            background-color: #ea580c; /* Darker orange on hover */
+            transform: translateY(-1px);
+        }
+        .btn-download {
+            background-color: #10b981; /* Green for download */
+            color: #ffffff;
+            border: none;
+        }
+        .btn-download:hover {
+            background-color: #059669; /* Darker green on hover */
+            transform: translateY(-1px);
+        }
+        .report-output {
+            background-color: #f8fafc; /* Very light blue-gray for output */
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem 2.5rem; /* Increased horizontal padding */
+            margin-top: 2rem;
+            white-space: pre-wrap; /* Preserve formatting */
+            font-size: 0.95rem;
+            line-height: 1; /* Minimal line height */
+            color: #334155; /* Medium dark text */
+        }
+        .report-output h2 {
+            font-size: 2rem; /* Larger main title */
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.1rem; /* Very small margin */
+            text-align: center;
+        }
+        .report-output .subtitle {
+            font-size: 1.5rem; /* Larger subtitle */
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 0.1rem; /* Very small margin */
+            text-align: center;
+        }
+        .report-output .company-info {
+            font-size: 0.9rem;
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 0.2rem; /* Very small margin */
+        }
+        .report-output .generated-date {
+            font-size: 0.85rem;
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 1rem; /* Keep a bit more space before the first section */
+        }
+        .report-output h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #334155;
+            margin-top: 0.6rem; /* Reduced space above sections */
+            margin-bottom: 0.2rem; /* Reduced space below section title */
+            border-bottom: 1px solid #cbd5e1; /* Solid separator for sections */
+            padding-bottom: 0.15rem; /* Reduced padding */
+        }
+        .report-output p {
+            margin-bottom: 0.1rem; /* Minimal space between paragraphs */
+        }
+        .report-output ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 0.1rem; /* Minimal space below lists */
+        }
+        .report-output ul li {
+            margin-bottom: 0; /* No space between list items */
+        }
+        .report-output strong {
+            color: #1e293b; /* Darker bold text */
+        }
+        .report-output .signature-line {
+            margin-top: 0.6rem; /* Reduced space for signatures */
+            padding-top: 0.3rem;
+            border-top: 1px dashed #a0aec0; /* Dashed line for signature */
+            font-size: 0.9rem;
+            color: #475569;
+        }
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+            .grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        .loading-indicator {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+            color: #64748b;
+        }
+        .loading-indicator.active {
+            display: block;
+        }
+        .gemini-output {
+            background-color: #fffbeb; /* Light yellow background for LLM output */
+            border: 1px solid #fcd34d; /* Yellow border */
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #78350f; /* Darker brown text */
+        }
+        .report-footer {
+            margin-top: 0.6rem; /* Reduced margin */
+            padding-top: 0.8rem;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        /* Table specific styles for report output */
+        .report-output table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.4rem; /* Reduced margin */
+            margin-bottom: 0.4rem; /* Reduced margin */
+        }
+        .report-output th, .report-output td {
+            border: 1px solid #e2e8f0;
+            padding: 0.2rem 0.4rem; /* Adjusted padding for table cells */
+            text-align: left;
+        }
+        .report-output th {
+            background-color: #e2e8f0;
+            font-weight: 600;
+            color: #334155;
+        }
+        .report-output tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .master-equipment-table, .saved-reports-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .master-equipment-table th, .master-equipment-table td,
+        .saved-reports-table th, .saved-reports-table td {
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem;
+            text-align: left;
+        }
+        .master-equipment-table th, .saved-reports-table th {
+            background-color: #e2e8f0;
+            font-weight: 600;
+        }
+        .master-equipment-table tr:nth-child(even), .saved-reports-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .master-equipment-table button, .saved-reports-table button {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">ADIMA SMART SECURE IOT DEVICES</h1>
+        <p class="text-center text-xl font-semibold text-gray-700 mb-2">INSTALLATION, COMMISSIONING AND WORK COMPLETION REPORT</p>
+        <p class="text-center text-sm text-gray-600 mb-6">Thane, Maharashtra 421204 | Contact: Mr. Alpesh Vichare</p>
+
+        <div id="authStatus" class="text-center text-sm text-gray-500 mb-4">
+            Loading user data...
+        </div>
+
+        <form id="reportForm" class="space-y-6">
+            <div class="p-4 bg-gray-50 rounded-lg shadow-sm">
+                <h2 class="section-title">Project Information</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="projectName" class="block text-sm font-medium text-gray-700 mb-1">Project Name/ID:</label>
+                        <input type="text" id="projectName" name="projectName" class="mt-1 block w-full" required>
+                    </div>
+                    <div>
+                        <label for="clientName" class="block text-sm font-medium text-gray-700 mb-1">Client Name:</label>
+                        <input type="text" id="clientName" name="clientName" class="mt-1 block w-full" required>
+                    </div>
+                    <div>
+                        <label for="clientContact" class="block text-sm font-medium text-gray-700 mb-1">Client Contact (Name & Number):</label>
+                        <input type="text" id="clientContact" name="clientContact" class="mt-1 block w-full">
+                    </div>
+                    <div>
+                        <label for="projectLocation" class="block text-sm font-medium text-gray-700 mb-1">Project Location/Address:</label>
+                        <input type="text" id="projectLocation" name="projectLocation" class="mt-1 block w-full" required>
+                    </div>
+                    <div>
+                        <label for="reportDate" class="block text-sm font-medium text-gray-700 mb-1">Report Date:</label>
+                        <input type="date" id="reportDate" name="reportDate" class="mt-1 block w-full" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gray-50 rounded-lg shadow-sm">
+                <h2 class="section-title">Installation & Delivery Details</h2>
+                <div class="grid grid-cols-1 md:col-span-2 gap-4">
+                    <div class="md:col-span-2">
+                        <label for="engineerName" class="block text-sm font-medium text-gray-700 mb-1">Installing Engineer Name:</label>
+                        <input type="text" id="engineerName" name="engineerName" class="mt-1 block w-full" required>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="scopeOfWork" class="block text-sm font-medium text-gray-700 mb-1">Scope of Work Completed:</label>
+                        <textarea id="scopeOfWork" name="scopeOfWork" rows="3" class="mt-1 block w-full"></textarea>
+                    </div>
+                    <div class="flex items-center mt-2">
+                        <input type="checkbox" id="materialsDelivered" name="materialsDelivered" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="materialsDelivered" class="ml-2 block text-sm font-medium text-gray-700">All materials delivered as specified (DC/Invoice)</label>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="discrepancyNotes" class="block text-sm font-medium text-gray-700 mb-1">Discrepancy Notes (if any):</label>
+                        <textarea id="discrepancyNotes" name="discrepancyNotes" rows="2" class="mt-1 block w-full"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gray-50 rounded-lg shadow-sm">
+                <h2 class="section-title">Manage Master Equipment List</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label for="masterEqType" class="block text-sm font-medium text-gray-700 mb-1">Type/Description:</label>
+                        <input type="text" id="masterEqType" class="mt-1 block w-full">
+                    </div>
+                    <div>
+                        <label for="masterEqModel" class="block text-sm font-medium text-gray-700 mb-1">Model/Make:</label>
+                        <input type="text" id="masterEqModel" class="mt-1 block w-full">
+                    </div>
+                    <div>
+                        <label for="masterEqSoftware" class="block text-sm font-medium text-gray-700 mb-1">Software Version:</label>
+                        <input type="text" id="masterEqSoftware" class="mt-1 block w-full">
+                    </div>
+                </div>
+                <button type="button" id="addMasterEquipmentBtn" class="btn btn-primary text-sm">Add to Master List</button>
+                <button type="button" id="updateMasterEquipmentBtn" class="btn btn-secondary text-sm hidden">Update Master Item</button>
+                <button type="button" id="cancelEditMasterEquipmentBtn" class="btn btn-secondary text-sm hidden">Cancel Edit</button>
+
+                <div id="masterEquipmentListDisplay" class="mt-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Current Master List</h3>
+                    <table class="master-equipment-table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Model</th>
+                                <th>Software</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="masterEquipmentTableBody">
+                            </tbody>
+                    </table>
+                    <p id="noMasterEquipment" class="text-sm text-gray-500 mt-2 hidden">No equipment in master list. Add some above!</p>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gray-50 rounded-lg shadow-sm">
+                <h2 class="section-title">Select Equipment for Report</h2>
+                <div id="equipmentSelectionArea" class="space-y-2">
+                    <p id="loadingMasterSelection" class="text-sm text-gray-500">Loading master equipment for selection...</p>
+                    </div>
+                <button type="button" id="addSelectedEquipmentToReportBtn" class="mt-4 btn btn-primary text-sm">Add Selected to Report</button>
+
+                <div id="reportEquipmentList" class="mt-6 space-y-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Equipment for Current Report</h3>
+                    <div id="currentReportEquipmentItems">
+                        <p class="text-sm text-gray-500">No equipment added to report yet.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gray-50 rounded-lg shadow-sm">
+                <h2 class="section-title">Quality Checks & Testing</h2>
+                <div class="space-y-2">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="eqMounted" name="qualityChecks" value="Equipment Securely Mounted" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="eqMounted" class="ml-2 block text-sm font-medium text-gray-700">Equipment Securely Mounted</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="cablesLabeled" name="qualityChecks" value="Cables Properly Labeled" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="cablesLabeled" class="ml-2 block text-sm font-medium text-gray-700">Cables Properly Labeled</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="powerVerified" name="qualityChecks" value="Power Connections Verified" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="powerVerified" class="ml-2 block text-sm font-medium text-gray-700">Power Connections Verified</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="safetyMet" name="qualityChecks" value="Safety Standards Met" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="safetyMet" class="ml-2 block text-sm font-medium text-gray-700">Safety Standards Met</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="sysComponentsTested" name="qualityChecks" value="System components tested & function as specified" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="sysComponentsTested" class="ml-2 block text-sm font-medium text-gray-700">System components tested & function as specified</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="clientWitnessed" name="qualityChecks" value="Client witnessed critical system tests" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="clientWitnessed" class="ml-2 block text-sm font-medium text-gray-700">Client witnessed critical system tests</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="uiVerified" name="qualityChecks" value="User interfaces verified as functional" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="uiVerified" class="ml-2 block text-sm font-medium text-gray-700">User interfaces verified as functional</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gray-50 rounded-lg shadow-sm">
+                <h2 class="section-title">Notes & Observations</h2>
+                <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Any additional notes, observations, or issues:</label>
+                <textarea id="notes" name="notes" rows="4" class="mt-1 block w-full"></textarea>
+                <button type="button" id="summarizeNotesBtn" class="mt-2 btn btn-gemini text-sm">Summarize Notes ✨</button>
+                <div id="summarizedNotesOutput" class="gemini-output hidden"></div>
+                <div id="summarizeLoading" class="loading-indicator">Summarizing...</div>
+            </div>
+
+            <div class="p-4 bg-gray-50 rounded-lg shadow-sm">
+                <h2 class="section-title">Verification & Acceptance</h2>
+                <p class="text-sm text-gray-600 mb-4">I confirm that all equipment has been installed and tested according to specifications, industry standards, and client requirements, and the system is ready for operational deployment.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="engineerNameSignature" class="block text-sm font-medium text-gray-700 mb-1">Engineer Name:</label>
+                        <input type="text" id="engineerNameSignature" name="engineerNameSignature" class="mt-1 block w-full" required>
+                    </div>
+                    <div>
+                        <label for="engineerContactNo" class="block text-sm font-medium text-gray-700 mb-1">Engineer Contact NO:</label>
+                        <input type="text" id="engineerContactNo" name="engineerContactNo" class="mt-1 block w-full">
+                    </div>
+                    <div class="md:col-span-2">
+                        <p class="text-sm font-medium text-gray-700 mb-1">Engineer Signature:</p>
+                        <div class="signature-line"></div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div>
+                        <label for="clientRepresentativeName" class="block text-sm font-medium text-gray-700 mb-1">Client Representative Name:</label>
+                        <input type="text" id="clientRepresentativeName" name="clientRepresentativeName" class="mt-1 block w-full" required>
+                    </div>
+                    <div>
+                        <label for="clientRepresentativeContactNo" class="block text-sm font-medium text-gray-700 mb-1">Client Representative Contact NO:</label>
+                        <input type="text" id="clientRepresentativeContactNo" name="clientRepresentativeContactNo" class="mt-1 block w-full">
+                    </div>
+                    <div class="md:col-span-2">
+                        <p class="text-sm font-medium text-gray-700 mb-1">Client Representative Signature:</p>
+                        <div class="signature-line"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-center mt-6 space-x-4">
+                <button type="button" id="generateSampleReportBtn" class="btn btn-secondary">Generate Sample Report</button>
+                <button type="submit" class="btn btn-primary">Generate Report</button>
+            </div>
+        </form>
+
+        <div class="p-4 bg-gray-50 rounded-lg shadow-sm mt-6">
+            <h2 class="section-title">Saved Reports</h2>
+            <button type="button" id="saveReportBtn" class="btn btn-primary text-sm mb-4">Save Current Report</button>
+            <div id="savedReportsLoading" class="loading-indicator">Loading saved reports...</div>
+            <table class="saved-reports-table">
+                <thead>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Client Name</th>
+                        <th>Report Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="savedReportsTableBody">
+                    </tbody>
+            </table>
+            <p id="noSavedReports" class="text-sm text-gray-500 mt-2 hidden">No saved reports found.</p>
+        </div>
+
+
+        <div id="reportOutput" class="report-output hidden"></div>
+        <div id="pdfLoading" class="loading-indicator">Generating PDF...</div>
+        <div id="downloadPdfButtonContainer" class="flex justify-center mt-4 hidden">
+            <button id="downloadPdfBtn" class="btn btn-download">Download as PDF</button>
+        </div>
+    </div>
+
+    <script type="module">
+        // Firebase imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, where, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('reportForm');
+            const authStatusDiv = document.getElementById('authStatus');
+
+            // Master Equipment List elements
+            const masterEqTypeInput = document.getElementById('masterEqType');
+            const masterEqModelInput = document.getElementById('masterEqModel');
+            const masterEqSoftwareInput = document.getElementById('masterEqSoftware');
+            const addMasterEquipmentBtn = document.getElementById('addMasterEquipmentBtn');
+            const updateMasterEquipmentBtn = document.getElementById('updateMasterEquipmentBtn');
+            const cancelEditMasterEquipmentBtn = document.getElementById('cancelEditMasterEquipmentBtn');
+            const masterEquipmentTableBody = document.getElementById('masterEquipmentTableBody');
+            const noMasterEquipmentText = document.getElementById('noMasterEquipment');
+
+            // Report Equipment Selection elements
+            const equipmentSelectionArea = document.getElementById('equipmentSelectionArea');
+            const loadingMasterSelection = document.getElementById('loadingMasterSelection');
+            const addSelectedEquipmentToReportBtn = document.getElementById('addSelectedEquipmentToReportBtn');
+            const currentReportEquipmentItems = document.getElementById('currentReportEquipmentItems');
+
+            // Saved Reports elements
+            const saveReportBtn = document.getElementById('saveReportBtn');
+            const savedReportsTableBody = document.getElementById('savedReportsTableBody');
+            const noSavedReportsText = document.getElementById('noSavedReports');
+            const savedReportsLoading = document.getElementById('savedReportsLoading');
+
+
+            // Existing elements
+            const notesTextarea = document.getElementById('notes');
+            const summarizeNotesBtn = document.getElementById('summarizeNotesBtn');
+            const summarizedNotesOutput = document.getElementById('summarizedNotesOutput');
+            const summarizeLoading = document.getElementById('summarizeLoading');
+            // Removed: const generateActionPlanBtn = document.getElementById('generateActionPlanBtn');
+            // Removed: const actionPlanOutput = document.getElementById('actionPlanOutput');
+            // Removed: const actionPlanLoading = document.getElementById('actionPlanLoading');
+            // Removed: const draftClientEmailBtn = document.getElementById('draftClientEmailBtn');
+            // Removed: const clientEmailOutput = document.getElementById('clientEmailOutput');
+            // Removed: const clientEmailLoading = document.getElementById('clientEmailLoading');
+            const reportOutput = document.getElementById('reportOutput');
+            const downloadPdfButtonContainer = document.getElementById('downloadPdfButtonContainer');
+            const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+            const pdfLoading = document.getElementById('pdfLoading');
+            const generateSampleReportBtn = document.getElementById('generateSampleReportBtn');
+
+            let db, auth, userId;
+            let editingMasterEquipmentId = null; // To store the ID of the equipment being edited
+            let reportEquipment = []; // Array to hold equipment selected for the current report
+
+            // Firebase Initialization
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+            const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+
+            if (Object.keys(firebaseConfig).length > 0) {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        authStatusDiv.textContent = `Authenticated as: ${userId}`;
+                        // Start listening for master equipment once authenticated
+                        listenForMasterEquipment();
+                        // Start listening for saved reports
+                        listenForSavedReports();
+                    } else {
+                        // Sign in anonymously if no user is found
+                        try {
+                            if (typeof __initial_auth_token !== 'undefined') {
+                                await signInWithCustomToken(auth, __initial_auth_token);
+                            } else {
+                                await signInAnonymously(auth);
+                            }
+                        } catch (error) {
+                            console.error("Error signing in:", error);
+                            authStatusDiv.textContent = `Authentication failed. Error: ${error.message}`;
+                        }
+                    }
+                });
+            } else {
+                authStatusDiv.textContent = "Firebase config not found. Data persistence will not work.";
+                console.error("Firebase config is missing. Please ensure __firebase_config is set.");
+            }
+
+            // --- Master Equipment Management Functions ---
+
+            // Renders the master equipment list from Firestore
+            const renderMasterEquipmentList = (masterEquipmentDocs) => {
+                masterEquipmentTableBody.innerHTML = '';
+                equipmentSelectionArea.innerHTML = ''; // Clear selection area too
+                loadingMasterSelection.classList.add('hidden'); // Hide loading text
+
+                if (masterEquipmentDocs.length === 0) {
+                    noMasterEquipmentText.classList.remove('hidden');
+                    equipmentSelectionArea.innerHTML = '<p class="text-sm text-gray-500">No master equipment available for selection.</p>';
+                    return;
+                } else {
+                    noMasterEquipmentText.classList.add('hidden');
+                }
+
+                // Render for Master List Display
+                masterEquipmentDocs.forEach(docData => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${docData.type || 'N/A'}</td>
+                        <td>${docData.model || 'N/A'}</td>
+                        <td>${docData.software || 'N/A'}</td>
+                        <td>
+                            <button type="button" data-id="${docData.id}" class="edit-master-btn btn-secondary">Edit</button>
+                            <button type="button" data-id="${docData.id}" class="delete-master-btn btn-secondary">Delete</button>
+                        </td>
+                    `;
+                    masterEquipmentTableBody.appendChild(tr);
+                });
+
+                // Render for Report Selection Area
+                masterEquipmentDocs.forEach(docData => {
+                    const div = document.createElement('div');
+                    div.className = 'flex items-center';
+                    div.innerHTML = `
+                        <input type="checkbox" id="select-eq-${docData.id}" name="selectedEquipment" value="${docData.id}"
+                               data-type="${docData.type || ''}"
+                               data-model="${docData.model || ''}"
+                               data-location=""
+                               data-quantity="1"
+                               data-software="${docData.software || ''}"
+                               class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="select-eq-${docData.id}" class="ml-2 block text-sm font-medium text-gray-700">
+                            ${docData.type || 'N/A'} - ${docData.model || 'N/A'} (v${docData.software || 'N/A'})
+                        </label>
+                    `;
+                    equipmentSelectionArea.appendChild(div);
+                });
+
+                // Add event listeners for edit/delete buttons
+                masterEquipmentTableBody.querySelectorAll('.edit-master-btn').forEach(button => {
+                    button.addEventListener('click', (e) => editMasterEquipment(e.target.dataset.id));
+                });
+                masterEquipmentTableBody.querySelectorAll('.delete-master-btn').forEach(button => {
+                    button.addEventListener('click', (e) => deleteMasterEquipment(e.target.dataset.id));
+                });
+            };
+
+            // Listen for real-time updates to the master equipment list
+            const listenForMasterEquipment = () => {
+                if (!db || !userId) {
+                    console.warn("Firestore or User ID not ready for listening.");
+                    return;
+                }
+                const q = query(collection(db, `artifacts/${appId}/public/data/equipment_master_list`));
+                onSnapshot(q, (snapshot) => {
+                    const masterEquipment = [];
+                    snapshot.forEach(doc => {
+                        masterEquipment.push({ id: doc.id, ...doc.data() });
+                    });
+                    renderMasterEquipmentList(masterEquipment);
+                }, (error) => {
+                    console.error("Error listening to master equipment:", error);
+                    authStatusDiv.textContent = `Error loading master equipment: ${error.message}`;
+                });
+            };
+
+            // Add new equipment to master list
+            addMasterEquipmentBtn.addEventListener('click', async () => {
+                if (!db || !userId) {
+                    alert("Please wait for authentication to complete.");
+                    return;
+                }
+                const type = masterEqTypeInput.value.trim();
+                const model = masterEqModelInput.value.trim();
+                const software = masterEqSoftwareInput.value.trim();
+
+                if (type && model) {
+                    try {
+                        await addDoc(collection(db, `artifacts/${appId}/public/data/equipment_master_list`), {
+                            type,
+                            model,
+                            software,
+                            createdAt: new Date()
+                        });
+                        masterEqTypeInput.value = '';
+                        masterEqModelInput.value = '';
+                        masterEqSoftwareInput.value = '';
+                    } catch (e) {
+                        console.error("Error adding document: ", e);
+                        alert("Error adding equipment: " + e.message);
+                    }
+                } else {
+                    alert('Please enter equipment type and model.');
+                }
+            });
+
+            // Edit master equipment (populate form)
+            const editMasterEquipment = async (id) => {
+                if (!db || !userId) return;
+                try {
+                    const docRef = doc(db, `artifacts/${appId}/public/data/equipment_master_list`, id);
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        masterEqTypeInput.value = data.type || '';
+                        masterEqModelInput.value = data.model || '';
+                        masterEqSoftwareInput.value = data.software || '';
+                        editingMasterEquipmentId = id; // Store ID for update
+                        addMasterEquipmentBtn.classList.add('hidden');
+                        updateMasterEquipmentBtn.classList.remove('hidden');
+                        cancelEditMasterEquipmentBtn.classList.remove('hidden');
+                    }
+                } catch (e) {
+                    console.error("Error fetching document for edit: ", e);
+                    alert("Error loading equipment for edit: " + e.message);
+                }
+            };
+
+            // Update master equipment
+            updateMasterEquipmentBtn.addEventListener('click', async () => {
+                if (!db || !userId || !editingMasterEquipmentId) {
+                    alert("No item selected for update or not authenticated.");
+                    return;
+                }
+                const type = masterEqTypeInput.value.trim();
+                const model = masterEqModelInput.value.trim();
+                const software = masterEqSoftwareInput.value.trim();
+
+                if (type && model) {
+                    try {
+                        const docRef = doc(db, `artifacts/${appId}/public/data/equipment_master_list`, editingMasterEquipmentId);
+                        await updateDoc(docRef, {
+                            type,
+                            model,
+                            software
+                        });
+                        masterEqTypeInput.value = '';
+                        masterEqModelInput.value = '';
+                        masterEqSoftwareInput.value = '';
+                        editingMasterEquipmentId = null;
+                        addMasterEquipmentBtn.classList.remove('hidden');
+                        updateMasterEquipmentBtn.classList.add('hidden');
+                        cancelEditMasterEquipmentBtn.classList.add('hidden');
+                    } catch (e) {
+                        console.error("Error updating document: ", e);
+                        alert("Error updating equipment: " + e.message);
+                    }
+                } else {
+                    alert('Please enter equipment type and model.');
+                }
+            });
+
+            // Cancel edit mode
+            cancelEditMasterEquipmentBtn.addEventListener('click', () => {
+                masterEqTypeInput.value = '';
+                masterEqModelInput.value = '';
+                masterEqSoftwareInput.value = '';
+                editingMasterEquipmentId = null;
+                addMasterEquipmentBtn.classList.remove('hidden');
+                updateMasterEquipmentBtn.classList.add('hidden');
+                cancelEditMasterEquipmentBtn.classList.add('hidden');
+            });
+
+            // Delete master equipment
+            const deleteMasterEquipment = async (id) => {
+                if (!db || !userId) return;
+                if (confirm("Are you sure you want to delete this equipment from the master list?")) {
+                    try {
+                        await deleteDoc(doc(db, `artifacts/${appId}/public/data/equipment_master_list`, id));
+                    } catch (e) {
+                        console.error("Error deleting document: ", e);
+                        alert("Error deleting equipment: " + e.message);
+                    }
+                }
+            };
+
+            // --- Report Equipment Selection Functions ---
+
+            // Renders the equipment selected for the current report
+            const renderReportEquipment = () => {
+                currentReportEquipmentItems.innerHTML = '';
+                if (reportEquipment.length === 0) {
+                    currentReportEquipmentItems.innerHTML = '<p class="text-sm text-gray-500">No equipment added to report yet.</p>';
+                    return;
+                }
+
+                reportEquipment.forEach((item, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'equipment-item p-3 border border-gray-200 rounded-md bg-white relative';
+                    div.innerHTML = `
+                        <button type="button" data-index="${index}" class="remove-report-eq-btn absolute top-2 right-2 text-red-500 hover:text-red-700 text-lg">&times;</button>
+                        <h3 class="text-md font-semibold text-gray-800 mb-2">Equipment Item ${index + 1}</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Type/Description:</label>
+                                <input type="text" name="equipmentType" class="block w-full text-sm" value="${item.type || ''}" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Model/Make:</label>
+                                <input type="text" name="equipmentModel" class="block w-full text-sm" value="${item.model || ''}" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Installation Location:</label>
+                                <input type="text" name="equipmentLocation" class="block w-full text-sm" value="${item.location || ''}">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Quantity:</label>
+                                <input type="number" name="equipmentQuantity" class="block w-full text-sm" min="1" value="${item.quantity || 1}">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Software Version (if applicable):</label>
+                                <input type="text" name="equipmentSoftware" class="block w-full text-sm" value="${item.software || ''}" readonly>
+                            </div>
+                        </div>
+                    `;
+                    currentReportEquipmentItems.appendChild(div);
+                });
+
+                // Add event listeners for removing report equipment items
+                currentReportEquipmentItems.querySelectorAll('.remove-report-eq-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const indexToRemove = parseInt(e.target.dataset.index);
+                        reportEquipment.splice(indexToRemove, 1);
+                        renderReportEquipment(); // Re-render the list
+                    });
+                });
+            };
+
+            // Add selected master equipment to the current report's equipment list
+            addSelectedEquipmentToReportBtn.addEventListener('click', () => {
+                const selectedCheckboxes = equipmentSelectionArea.querySelectorAll('input[name="selectedEquipment"]:checked');
+                selectedCheckboxes.forEach(checkbox => {
+                    const newItem = {
+                        id: checkbox.value, // Firestore ID
+                        type: checkbox.dataset.type,
+                        model: checkbox.dataset.model,
+                        location: '', // User will fill this in the report
+                        quantity: 1, // Default quantity
+                        software: checkbox.dataset.software
+                    };
+                    // Only add if not already in reportEquipment (based on id)
+                    if (!reportEquipment.some(item => item.id === newItem.id)) {
+                        reportEquipment.push(newItem);
+                    }
+                    checkbox.checked = false; // Uncheck after adding
+                });
+                renderReportEquipment(); // Update the display for the report's equipment
+            });
+
+            // --- Saved Reports Functions ---
+
+            // Renders the list of saved reports
+            const renderSavedReports = (reports) => {
+                savedReportsTableBody.innerHTML = '';
+                savedReportsLoading.classList.add('hidden');
+                if (reports.length === 0) {
+                    noSavedReportsText.classList.remove('hidden');
+                    return;
+                } else {
+                    noSavedReportsText.classList.add('hidden');
+                }
+
+                reports.forEach(report => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${report.projectName || 'N/A'}</td>
+                        <td>${report.clientName || 'N/A'}</td>
+                        <td>${report.reportDate || 'N/A'}</td>
+                        <td>
+                            <button type="button" data-id="${report.id}" class="load-report-btn btn-primary">Load</button>
+                            <button type="button" data-id="${report.id}" class="delete-report-btn btn-secondary">Delete</button>
+                        </td>
+                    `;
+                    savedReportsTableBody.appendChild(tr);
+                });
+
+                savedReportsTableBody.querySelectorAll('.load-report-btn').forEach(button => {
+                    button.addEventListener('click', (e) => loadReport(e.target.dataset.id));
+                });
+                savedReportsTableBody.querySelectorAll('.delete-report-btn').forEach(button => {
+                    button.addEventListener('click', (e) => deleteReport(e.target.dataset.id));
+                });
+            };
+
+            // Listen for real-time updates to saved reports
+            const listenForSavedReports = () => {
+                if (!db || !userId) {
+                    console.warn("Firestore or User ID not ready for saved reports listening.");
+                    return;
+                }
+                const q = query(collection(db, `artifacts/${appId}/users/${userId}/reports`));
+                onSnapshot(q, (snapshot) => {
+                    const savedReports = [];
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        // IMPORTANT: Deserialize equipment if it was stored as a JSON string
+                        if (data.equipment && typeof data.equipment === 'string') {
+                            try {
+                                data.equipment = JSON.parse(data.equipment);
+                            } catch (e) {
+                                console.error("Error parsing equipment JSON:", e);
+                                data.equipment = []; // Fallback
+                            }
+                        }
+                        savedReports.push({ id: doc.id, ...data });
+                    });
+                    renderSavedReports(savedReports);
+                }, (error) => {
+                    console.error("Error listening to saved reports:", error);
+                    savedReportsLoading.textContent = `Error loading saved reports: ${error.message}`;
+                });
+            };
+
+            // Save current report to Firestore
+            saveReportBtn.addEventListener('click', async () => {
+                if (!db || !userId) {
+                    alert("Please wait for authentication to complete before saving.");
+                    return;
+                }
+
+                const formData = new FormData(form);
+                const reportData = {};
+                for (let [key, value] of formData.entries()) {
+                    reportData[key] = value;
+                }
+
+                // Get quality checks
+                reportData.qualityChecks = Array.from(form.querySelectorAll('input[name="qualityChecks"]:checked')).map(cb => cb.value);
+
+                // Get the current state of reportEquipment (including location/quantity)
+                const currentReportEquipmentState = [];
+                document.querySelectorAll('#currentReportEquipmentItems .equipment-item').forEach((itemDiv) => {
+                    const item = {};
+                    item.type = itemDiv.querySelector('input[name="equipmentType"]').value;
+                    item.model = itemDiv.querySelector('input[name="equipmentModel"]').value;
+                    item.location = itemDiv.querySelector('input[name="equipmentLocation"]').value;
+                    item.quantity = itemDiv.querySelector('input[name="equipmentQuantity"]').value;
+                    item.software = itemDiv.querySelector('input[name="equipmentSoftware"]').value;
+                    currentReportEquipmentState.push(item);
+                });
+                // IMPORTANT: Serialize complex objects like arrays of objects to JSON string before saving
+                reportData.equipment = JSON.stringify(currentReportEquipmentState);
+
+                try {
+                    await addDoc(collection(db, `artifacts/${appId}/users/${userId}/reports`), {
+                        ...reportData,
+                        savedAt: new Date()
+                    });
+                    alert('Report saved successfully!');
+                } catch (e) {
+                        console.error("Error saving report: ", e);
+                        alert("Error saving report: " + e.message);
+                }
+            });
+
+            // Load a saved report into the form
+            const loadReport = async (reportId) => {
+                if (!db || !userId) return;
+
+                try {
+                    const docRef = doc(db, `artifacts/${appId}/users/${userId}/reports`, reportId);
+                    const docSnap = await getDoc(docRef);
+
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+
+                        // Populate basic fields
+                        document.getElementById('projectName').value = data.projectName || '';
+                        document.getElementById('clientName').value = data.clientName || '';
+                        document.getElementById('clientContact').value = data.clientContact || '';
+                        document.getElementById('projectLocation').value = data.projectLocation || '';
+                        document.getElementById('reportDate').value = data.reportDate || '';
+                        document.getElementById('engineerName').value = data.engineerName || '';
+                        document.getElementById('scopeOfWork').value = data.scopeOfWork || '';
+                        document.getElementById('materialsDelivered').checked = data.materialsDelivered || false;
+                        document.getElementById('discrepancyNotes').value = data.discrepancyNotes || '';
+                        document.getElementById('notes').value = data.notes || '';
+                        document.getElementById('engineerNameSignature').value = data.engineerNameSignature || '';
+                        document.getElementById('engineerContactNo').value = data.engineerContactNo || '';
+                        document.getElementById('clientRepresentativeName').value = data.clientRepresentativeName || '';
+                        document.getElementById('clientRepresentativeContactNo').value = data.clientRepresentativeContactNo || '';
+
+                        // Populate quality checks
+                        form.querySelectorAll('input[name="qualityChecks"]').forEach(checkbox => {
+                            checkbox.checked = false; // Uncheck all first
+                        });
+                        if (data.qualityChecks && Array.isArray(data.qualityChecks)) {
+                            data.qualityChecks.forEach(checkedValue => {
+                                const checkbox = form.querySelector(`input[name="qualityChecks"][value="${checkedValue}"]`);
+                                if (checkbox) checkbox.checked = true;
+                            });
+                        }
+
+                        // Populate report equipment (deserialize if needed)
+                        reportEquipment = []; // Clear current report equipment
+                        let loadedEquipment = [];
+                        if (data.equipment) {
+                            if (typeof data.equipment === 'string') {
+                                try {
+                                    loadedEquipment = JSON.parse(data.equipment);
+                                } catch (e) {
+                                    console.error("Error parsing loaded equipment JSON:", e);
+                                }
+                            } else if (Array.isArray(data.equipment)) {
+                                loadedEquipment = data.equipment;
+                            }
+                        }
+                        reportEquipment = loadedEquipment;
+                        renderReportEquipment(); // Re-render the report equipment section
+
+                        alert('Report loaded successfully!');
+                        window.scrollTo(0, 0); // Scroll to top of the form
+                    } else {
+                        alert("Report not found.");
+                    }
+                } catch (e) {
+                    console.error("Error loading report: ", e);
+                    alert("Error loading report: " + e.message);
+                }
+            };
+
+            // Delete a saved report
+            const deleteReport = async (reportId) => {
+                if (!db || !userId) return;
+                if (confirm("Are you sure you want to delete this saved report? This action cannot be undone.")) {
+                    try {
+                        await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/reports`, reportId));
+                        alert('Report deleted successfully!');
+                    } catch (e) {
+                        console.error("Error deleting report: ", e);
+                        alert("Error deleting report: " + e.message);
+                    }
+                }
+            };
+
+            // --- Existing Functionality (Modified for new equipment handling) ---
+
+            // Function to populate form with sample data
+            const populateSampleData = async () => {
+                document.getElementById('projectName').value = 'Smart Home Security System - Phase 1';
+                document.getElementById('clientName').value = 'ABC Corporation';
+                document.getElementById('clientContact').value = 'Ms. Jane Doe, +91 98765 43210';
+                document.getElementById('projectLocation').value = 'Building A, 123 Main St, Mumbai, Maharashtra';
+                document.getElementById('reportDate').value = '2025-05-25';
+                document.getElementById('engineerName').value = 'Mr. John Smith';
+                document.getElementById('scopeOfWork').value = 'Installation and configuration of 5 IoT security cameras and 2 smart hubs. Integration with existing network infrastructure.';
+                document.getElementById('materialsDelivered').checked = true;
+                document.getElementById('discrepancyNotes').value = 'Minor delay in delivery of one camera, resolved on-site.';
+                document.getElementById('notes').value = 'System fully operational. Client training completed successfully. Advised client on routine maintenance checks and software updates.';
+
+                // Clear existing report equipment
+                reportEquipment = [];
+
+                // Add sample equipment items to master list (if they don't exist)
+                const sampleMasterItems = [
+                    { type: 'IoT Security Camera', model: 'Model X200', software: 'v1.2.0' },
+                    { type: 'Smart Hub', model: 'Hub-Pro 3000', software: 'v2.1.5' },
+                    { type: 'Motion Sensor', model: 'MS-50', software: 'v1.0.0' }
+                ];
+
+                if (db && userId) {
+                    const masterCollectionRef = collection(db, `artifacts/${appId}/public/data/equipment_master_list`);
+                    const existingDocs = await getDocs(masterCollectionRef);
+                    const existingModels = new Set(existingDocs.docs.map(doc => doc.data().model));
+
+                    for (const item of sampleMasterItems) {
+                        if (!existingModels.has(item.model)) {
+                            await addDoc(masterCollectionRef, {
+                                type: item.type,
+                                model: item.model,
+                                software: item.software,
+                                createdAt: new Date()
+                            });
+                        }
+                    }
+
+                    // Also save a sample report if it doesn't exist
+                    const reportsCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/reports`);
+                    const sampleReportQuery = query(reportsCollectionRef, where("projectName", "==", "Sample Project Report"));
+                    const existingReports = await getDocs(sampleReportQuery);
+
+                    if (existingReports.empty) {
+                        const sampleReportData = {
+                            projectName: 'Sample Project Report',
+                            clientName: 'Sample Client Inc.',
+                            clientContact: 'Mr. Sample Contact, +91 12345 67890',
+                            projectLocation: 'Sample Location, Mumbai',
+                            reportDate: '2025-05-20',
+                            engineerName: 'Sample Engineer',
+                            scopeOfWork: 'Installation of sample IoT devices and network integration.',
+                            materialsDelivered: true,
+                            discrepancyNotes: 'None.',
+                            notes: 'This is a sample report generated to demonstrate load functionality.',
+                            qualityChecks: ["Equipment Securely Mounted", "Cables Properly Labeled", "Power Connections Verified"],
+                            equipment: JSON.stringify([ // Stored as JSON string
+                                { type: 'IoT Security Camera', model: 'Model A100', location: 'Living Room', quantity: 1, software: 'v1.0.0' },
+                                { type: 'Smart Hub', model: 'Hub-Lite', location: 'Central Hub', quantity: 1, software: 'v1.0.0' }
+                            ]),
+                            engineerNameSignature: 'Sample Engineer',
+                            engineerContactNo: '+91 11223 34455',
+                            clientRepresentativeName: 'Ms. Sample Client Rep',
+                            clientRepresentativeContactNo: '+91 99887 76655',
+                            savedAt: new Date()
+                        };
+                        await addDoc(reportsCollectionRef, sampleReportData);
+                    }
+                }
+
+
+                // Select sample equipment for the report
+                reportEquipment.push(
+                    { type: 'IoT Security Camera', model: 'Model X200', location: 'Living Room', quantity: 2, software: 'v1.2.0' },
+                    { type: 'IoT Security Camera', model: 'Model X200', location: 'Main Entrance', quantity: 1, software: 'v1.2.0' },
+                    { type: 'Smart Hub', model: 'Hub-Pro 3000', location: 'Server Room', quantity: 1, software: 'v2.1.5' },
+                    { type: 'Motion Sensor', model: 'MS-50', location: 'Hallway', quantity: 2, software: 'v1.0.0' }
+                );
+                renderReportEquipment(); // Render the sample equipment for the report
+
+                // Set quality checks
+                document.getElementById('eqMounted').checked = true;
+                document.getElementById('cablesLabeled').checked = true;
+                document.getElementById('powerVerified').checked = true;
+                document.getElementById('safetyMet').checked = true;
+                document.getElementById('sysComponentsTested').checked = true;
+                document.getElementById('clientWitnessed').checked = true;
+                document.getElementById('uiVerified').checked = true;
+
+                document.getElementById('engineerNameSignature').value = 'John Smith';
+                document.getElementById('engineerContactNo').value = '+91 99887 76655';
+                document.getElementById('clientRepresentativeName').value = 'Jane Doe';
+                document.getElementById('clientRepresentativeContactNo').value = '+91 98765 43210';
+
+                // Scroll to top of the form
+                form.scrollIntoView({ behavior: 'smooth' });
+            };
+
+            // Event listener for Generate Sample Report button
+            generateSampleReportBtn.addEventListener('click', populateSampleData);
+
+
+            // Function to call Gemini API for text generation
+            async function callGeminiAPI(prompt, outputElement, loadingElement) {
+                outputElement.classList.add('hidden');
+                loadingElement.classList.add('active');
+                outputElement.innerHTML = ''; // Clear previous output
+
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiKey = ""; // Canvas will automatically provide this at runtime
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        outputElement.innerHTML = text;
+                        outputElement.classList.remove('hidden');
+                    } else {
+                        outputElement.innerHTML = 'Error: Could not generate response. Please try again.';
+                        outputElement.classList.remove('hidden');
+                        console.error('Gemini API response structure unexpected:', result);
+                    }
+                } catch (error) {
+                    outputElement.innerHTML = 'Error: Failed to connect to Gemini API. Check console for details.';
+                    outputElement.classList.remove('hidden');
+                    console.error('Gemini API fetch error:', error);
+                } finally {
+                    loadingElement.classList.remove('active');
+                }
+            }
+
+            // Event listener for Summarize Notes button
+            summarizeNotesBtn.addEventListener('click', () => {
+                const notes = notesTextarea.value.trim();
+                if (notes) {
+                    const prompt = `Summarize the following installation notes concisely: ${notes}`;
+                    callGeminiAPI(prompt, summarizedNotesOutput, summarizeLoading);
+                } else {
+                    summarizedNotesOutput.innerHTML = 'Please enter some notes to summarize.';
+                    summarizedNotesOutput.classList.remove('hidden');
+                }
+            });
+
+            // Removed event listeners for Generate Action Plan and Draft Client Email
+            // generateActionPlanBtn.addEventListener('click', ...);
+            // draftClientEmailBtn.addEventListener('click', ...);
+
+
+            // Handle form submission (existing functionality)
+            form.addEventListener('submit', (event) => {
+                event.preventDefault(); // Prevent default form submission
+
+                const formData = new FormData(form);
+                const data = {};
+                for (let [key, value] of formData.entries()) {
+                    data[key] = value;
+                }
+
+                // Handle checkboxes separately as FormData only gets the last value for multiple checkboxes with the same name
+                data.qualityChecks = Array.from(form.querySelectorAll('input[name="qualityChecks"]:checked')).map(cb => cb.value);
+
+                // IMPORTANT: Get the latest values for location and quantity from the dynamically rendered report equipment
+                const finalReportEquipment = [];
+                document.querySelectorAll('#currentReportEquipmentItems .equipment-item').forEach((itemDiv) => {
+                    const item = {};
+                    item.type = itemDiv.querySelector('input[name="equipmentType"]').value;
+                    item.model = itemDiv.querySelector('input[name="equipmentModel"]').value;
+                    item.location = itemDiv.querySelector('input[name="equipmentLocation"]').value;
+                    item.quantity = itemDiv.querySelector('input[name="equipmentQuantity"]').value;
+                    item.software = itemDiv.querySelector('input[name="equipmentSoftware"]').value;
+                    finalReportEquipment.push(item);
+                });
+                data.equipment = finalReportEquipment;
+
+
+                // Generate the report content
+                let reportContent = `
+                    <h2 class="text-center text-gray-800">ADIMA SMART SECURE IOT DEVICES</h2>
+                    <p class="subtitle">INSTALLATION, COMMISSIONING AND WORK COMPLETION REPORT</p>
+                    <p class="company-info">Thane, Maharashtra 421204 | Contact: Mr. Alpesh Vichare</p>
+                    <p class="text-center generated-date">Generated on: ${new Date().toLocaleDateString()}</p>
+
+                    <h3>Project Information</h3>
+                    <p><strong>Project Name/ID:</strong> ${data.projectName}</p>
+                    <p><strong>Client Name:</strong> ${data.clientName}</p>
+                    <p><strong>Client Contact:</strong> ${data.clientContact}</p>
+                    <p><strong>Project Location/Address:</strong> ${data.projectLocation}</p>
+                    <p><strong>Report Date:</strong> ${data.reportDate}</p>
+
+                    <h3>Installation & Delivery Details</h3>
+                    <p><strong>Installing Engineer:</strong> ${data.engineerName}</p>
+                    <p><strong>Scope of Work Completed:</strong> ${data.scopeOfWork || 'N/A'}</p>
+                    <p><strong>Materials Delivered as Specified:</strong> ${data.materialsDelivered ? 'Yes' : 'No'}</p>
+                    <p><strong>Discrepancy Notes:</strong> ${data.discrepancyNotes || 'None'}</p>
+                `;
+
+                if (data.equipment.length > 0) {
+                    reportContent += `<h3>Equipment Summary</h3>
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Type/Description</th>
+                                    <th>Model/Make</th>
+                                    <th>Installation Location</th>
+                                    <th>Quantity</th>
+                                    <th>Software Version</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+                    data.equipment.forEach((item) => {
+                        reportContent += `
+                            <tr>
+                                <td>${item.type || 'N/A'}</td>
+                                <td>${item.model || 'N/A'}</td>
+                                <td>${item.location || 'N/A'}</td>
+                                <td>${item.quantity || 'N/A'}</td>
+                                <td>${item.software || 'N/A'}</td>
+                            </tr>
+                        `;
+                    });
+                    reportContent += `</tbody></table>`;
+                }
+
+                reportContent += `
+                    <h3>Quality Checks & Testing</h3>
+                    <ul>
+                `;
+                if (data.qualityChecks && data.qualityChecks.length > 0) {
+                    data.qualityChecks.forEach(check => {
+                        reportContent += `<li>${check}: <span class="font-semibold text-green-700">Pass</span></li>`;
+                    });
+                } else {
+                    reportContent += `<li>No specific checks marked.</li>`;
+                }
+                reportContent += `</ul>`;
+
+                reportContent += `
+                    <h3>Notes & Observations</h3>
+                    <p>${data.notes || 'None'}</p>
+                `;
+
+                // Add summarized notes if available
+                if (summarizedNotesOutput.innerHTML && !summarizedNotesOutput.classList.contains('hidden')) {
+                    reportContent += `
+                        <h4>Summarized Notes:</h4>
+                        <p class="gemini-output">${summarizedNotesOutput.innerHTML}</p>
+                    `;
+                }
+
+                // Removed: Action Plan if available
+                // Removed: Client Email if available
+
+
+                reportContent += `
+                    <h3>Verification & Acceptance</h3>
+                    <p>I confirm that all equipment has been installed and tested according to specifications, industry standards, and client requirements, and the system is fully ready for operational deployment.</p>
+                    <p class="mt-4"><strong>Engineer Name:</strong> ${data.engineerNameSignature}</p>
+                    <p><strong>Engineer Contact NO:</strong> ${data.engineerContactNo || 'N/A'}</p>
+                    <p class="mt-4"><strong>Signature:</strong> _________________________</p>
+                    <p><strong>Date:</strong> ${data.reportDate}</p>
+                    <p class="mt-4"><strong>Client Representative Name:</strong> ${data.clientRepresentativeName}</p>
+                    <p><strong>Client Representative Contact NO:</strong> ${data.clientRepresentativeContactNo || 'N/A'}</p>
+                    <p class="mt-4"><strong>Signature:</strong> _________________________</p>
+                    <p><strong>Date:</strong> ${data.reportDate}</p>
+                `;
+
+                // Add the new footer content
+                reportContent += `
+                    <div class="report-footer">
+                        <p>Document ID: IR-${Date.now()}</p>
+                        <p>Adima Smart Secure IOT Devices | Thane, Maharashtra 421204</p>
+                        <p><a href="http://www.adimasmart.com" target="_blank" class="text-blue-600 hover:underline">www.adimasmart.com</a></p>
+                    </div>
+                `;
+
+                reportOutput.innerHTML = reportContent;
+                reportOutput.classList.remove('hidden'); // Show the report
+                downloadPdfButtonContainer.classList.remove('hidden'); // Show the PDF download button
+                window.scrollTo(0, document.body.scrollHeight); // Scroll to the bottom to show the report
+            });
+
+            // Handle PDF download - REVISED LOGIC FOR BETTER QUALITY AND LAYOUT
+            downloadPdfBtn.addEventListener('click', async () => {
+                pdfLoading.classList.add('active'); // Show PDF loading indicator
+                downloadPdfButtonContainer.classList.add('hidden'); // Hide download button during generation
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4'); // A4 size in mm
+                const margin = 15; // Page margin in mm
+                let yPos = margin; // Current Y position for content
+                const defaultLineHeight = 6; // Base line height for text (increased for better spacing)
+                const sectionTitleLineHeight = 7;
+                const tableRowHeight = 7;
+                const tableHeaderHeight = 8;
+                const maxPageHeight = 297 - (2 * margin); // Usable page height
+
+                const data = {};
+                const formData = new FormData(form);
+                for (let [key, value] of formData.entries()) {
+                    data[key] = value;
+                }
+                data.qualityChecks = Array.from(form.querySelectorAll('input[name="qualityChecks"]:checked')).map(cb => cb.value);
+
+                // IMPORTANT: Get the latest values for location and quantity from the dynamically rendered report equipment
+                const finalReportEquipmentForPdf = [];
+                document.querySelectorAll('#currentReportEquipmentItems .equipment-item').forEach((itemDiv) => {
+                    const item = {};
+                    item.type = itemDiv.querySelector('input[name="equipmentType"]').value;
+                    item.model = itemDiv.querySelector('input[name="equipmentModel"]').value;
+                    item.location = itemDiv.querySelector('input[name="equipmentLocation"]').value;
+                    item.quantity = itemDiv.querySelector('input[name="equipmentQuantity"]').value;
+                    item.software = itemDiv.querySelector('input[name="equipmentSoftware"]').value;
+                    finalReportEquipmentForPdf.push(item);
+                });
+                data.equipment = finalReportEquipmentForPdf;
+
+                // Helper to add a new page if content overflows
+                const checkPageBreak = (requiredHeight) => {
+                    if (yPos + requiredHeight > margin + maxPageHeight) {
+                        pdf.addPage();
+                        yPos = margin; // Reset Y position for new page
+                    }
+                };
+
+                // --- Header ---
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(20);
+                pdf.text('ADIMA SMART SECURE IOT DEVICES', 105, yPos, { align: 'center' });
+                yPos += 9;
+
+                pdf.setFontSize(16);
+                pdf.text('INSTALLATION, COMMISSIONING AND WORK COMPLETION REPORT', 105, yPos, { align: 'center' });
+                yPos += 7;
+
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(10);
+                pdf.setTextColor(100, 100, 100); // Gray color
+                pdf.text(`Thane, Maharashtra 421204 | Contact: Mr. Alpesh Vichare`, 105, yPos, { align: 'center' });
+                yPos += 5;
+                pdf.text(`Generated on: ${new Date().toLocaleDateString()}`, 105, yPos, { align: 'center' });
+                yPos += 12;
+
+                pdf.setTextColor(0, 0, 0); // Reset to black
+
+                // --- Project Information ---
+                checkPageBreak(sectionTitleLineHeight + (defaultLineHeight * 5));
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(14);
+                pdf.text('Project Information', margin, yPos);
+                pdf.line(margin, yPos + 1, 210 - margin, yPos + 1); // Underline
+                yPos += sectionTitleLineHeight;
+
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(10); // Changed to 10pt
+                const contentWidth = 210 - (2 * margin); // Usable width for content
+
+                pdf.text(`Project Name/ID: ${data.projectName}`, margin, yPos); yPos += defaultLineHeight;
+                pdf.text(`Client Name: ${data.clientName}`, margin, yPos); yPos += defaultLineHeight;
+                pdf.text(`Client Contact: ${data.clientContact}`, margin, yPos); yPos += defaultLineHeight;
+                pdf.text(`Project Location/Address: ${data.projectLocation}`, margin, yPos); yPos += defaultLineHeight;
+                pdf.text(`Report Date: ${data.reportDate}`, margin, yPos); yPos += defaultLineHeight * 2;
+
+                // --- Installation & Delivery Details ---
+                checkPageBreak(sectionTitleLineHeight + (defaultLineHeight * 5));
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(14);
+                pdf.text('Installation & Delivery Details', margin, yPos);
+                pdf.line(margin, yPos + 1, 210 - margin, yPos + 1); // Underline
+                yPos += sectionTitleLineHeight;
+
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(10); // Changed to 10pt
+                pdf.text(`Installing Engineer: ${data.engineerName}`, margin, yPos); yPos += defaultLineHeight;
+
+                // Handle Scope of Work
+                const scopeOfWorkLabel = `Scope of Work Completed: `;
+                pdf.text(scopeOfWorkLabel, margin, yPos);
+                // Calculate remaining width for the value text
+                const scopeOfWorkValueWidth = contentWidth - pdf.getStringUnitWidth(scopeOfWorkLabel) * pdf.internal.getFontSize() / pdf.internal.scaleFactor;
+                const scopeOfWorkValueLines = pdf.splitTextToSize(data.scopeOfWork || 'N/A', scopeOfWorkValueWidth);
+
+                // Print the first line of the value next to the label
+                let currentXForValue = margin + pdf.getStringUnitWidth(scopeOfWorkLabel) * pdf.internal.getFontSize() / pdf.internal.scaleFactor;
+                pdf.text(scopeOfWorkValueLines[0], currentXForValue, yPos);
+                yPos += defaultLineHeight; // Move yPos down after the first line
+
+                // Print subsequent lines of scope of work value, starting from the main margin
+                for (let i = 1; i < scopeOfWorkValueLines.length; i++) {
+                    pdf.text(scopeOfWorkValueLines[i], margin, yPos);
+                    yPos += defaultLineHeight;
+                }
+                // Add extra space after the whole block if there were multiple lines
+                if (scopeOfWorkValueLines.length > 1) yPos += defaultLineHeight * 0.5;
+
+
+                pdf.text(`Materials Delivered as Specified: ${data.materialsDelivered ? 'Yes' : 'No'}`, margin, yPos); yPos += defaultLineHeight;
+
+                // Handle Discrepancy Notes
+                const discrepancyNotesLabel = `Discrepancy Notes: `;
+                pdf.text(discrepancyNotesLabel, margin, yPos);
+                const discrepancyNotesValueWidth = contentWidth - pdf.getStringUnitWidth(discrepancyNotesLabel) * pdf.internal.getFontSize() / pdf.internal.scaleFactor;
+                const discrepancyNotesValueLines = pdf.splitTextToSize(data.discrepancyNotes || 'None', discrepancyNotesValueWidth);
+
+                currentXForValue = margin + pdf.getStringUnitWidth(discrepancyNotesLabel) * pdf.internal.getFontSize() / pdf.internal.scaleFactor;
+                pdf.text(discrepancyNotesValueLines[0], currentXForValue, yPos);
+                yPos += defaultLineHeight;
+
+                for (let i = 1; i < discrepancyNotesValueLines.length; i++) {
+                    pdf.text(discrepancyNotesValueLines[i], margin, yPos);
+                    yPos += defaultLineHeight;
+                }
+                if (discrepancyNotesValueLines.length > 1) yPos += defaultLineHeight * 0.5;
+                yPos += defaultLineHeight; // Add extra space after the whole block
+
+
+                // --- Equipment Summary ---
+                if (data.equipment.length > 0) {
+                    checkPageBreak(sectionTitleLineHeight + tableHeaderHeight + (data.equipment.length * tableRowHeight));
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(14);
+                    pdf.text('Equipment Summary', margin, yPos);
+                    pdf.line(margin, yPos + 1, 210 - margin, yPos + 1); // Underline
+                    yPos += sectionTitleLineHeight;
+
+                    // Table Headers
+                    pdf.setFontSize(10);
+                    pdf.setFillColor(226, 232, 240); // Tailwind gray-200
+                    pdf.rect(margin, yPos, 180, tableHeaderHeight, 'F'); // Background for header
+                    pdf.setTextColor(51, 65, 85); // Tailwind gray-700
+                    pdf.text('Type/Description', margin + 2, yPos + tableHeaderHeight / 2 + 1);
+                    pdf.text('Model/Make', margin + 50, yPos + tableHeaderHeight / 2 + 1);
+                    pdf.text('Location', margin + 90, yPos + tableHeaderHeight / 2 + 1);
+                    pdf.text('Qty', margin + 125, yPos + tableHeaderHeight / 2 + 1);
+                    pdf.text('Software Version', margin + 140, yPos + tableHeaderHeight / 2 + 1);
+                    yPos += tableHeaderHeight;
+
+                    // Table Rows
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFontSize(9);
+                    data.equipment.forEach((item, index) => {
+                        checkPageBreak(tableRowHeight);
+                        if (index % 2 === 0) {
+                            pdf.setFillColor(248, 250, 252); // Tailwind blue-gray-50
+                            pdf.rect(margin, yPos, 180, tableRowHeight, 'F');
+                        } else {
+                            pdf.setFillColor(255, 255, 255); // White
+                            pdf.rect(margin, yPos, 180, tableRowHeight, 'F');
+                        }
+                        pdf.setTextColor(51, 65, 85);
+                        pdf.text(item.type || 'N/A', margin + 2, yPos + tableRowHeight / 2 + 1);
+                        pdf.text(item.model || 'N/A', margin + 50, yPos + tableRowHeight / 2 + 1);
+                        pdf.text(item.location || 'N/A', margin + 90, yPos + tableRowHeight / 2 + 1);
+                        pdf.text(item.quantity ? String(item.quantity) : 'N/A', margin + 125, yPos + tableRowHeight / 2 + 1);
+                        pdf.text(item.software || 'N/A', margin + 140, yPos + tableRowHeight / 2 + 1);
+                        yPos += tableRowHeight;
+                    });
+                    yPos += defaultLineHeight * 1.5; // Space after table
+                }
+
+                // --- Quality Checks & Testing ---
+                checkPageBreak(sectionTitleLineHeight + (defaultLineHeight * (data.qualityChecks.length > 0 ? data.qualityChecks.length : 1)));
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(14);
+                pdf.text('Quality Checks & Testing', margin, yPos);
+                pdf.line(margin, yPos + 1, 210 - margin, yPos + 1); // Underline
+                yPos += sectionTitleLineHeight;
+
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(10); // Changed to 10pt
+                if (data.qualityChecks && data.qualityChecks.length > 0) {
+                    data.qualityChecks.forEach(check => {
+                        // Draw a filled square for the checkbox
+                        pdf.setFillColor(0, 0, 0); // Black color for the checkbox
+                        pdf.rect(margin + 5, yPos + 1, 3, 3, 'F'); // x, y, width, height, style ('F' for filled)
+                        pdf.setTextColor(0, 0, 0); // Reset text color to black
+                        pdf.text(`${check}: Pass`, margin + 5 + 3 + 2, yPos + defaultLineHeight - 2); // Text next to the checkbox
+                        yPos += defaultLineHeight;
+                    });
+                } else {
+                    pdf.text('• No specific checks marked.', margin + 5, yPos); yPos += defaultLineHeight;
+                }
+                yPos += defaultLineHeight * 1.5;
+
+                // --- Notes & Observations ---
+                checkPageBreak(sectionTitleLineHeight + (defaultLineHeight * 3));
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(14);
+                pdf.text('Notes & Observations', margin, yPos);
+                pdf.line(margin, yPos + 1, 210 - margin, yPos + 1); // Underline
+                yPos += sectionTitleLineHeight;
+
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(10); // Changed to 10pt
+                const notesText = pdf.splitTextToSize(data.notes || 'None', contentWidth);
+                pdf.text(notesText, margin, yPos);
+                yPos += (notesText.length * defaultLineHeight) + defaultLineHeight * 1.5;
+
+                // --- Summarized Notes (if available) ---
+                if (summarizedNotesOutput.innerHTML && !summarizedNotesOutput.classList.contains('hidden')) {
+                    checkPageBreak(sectionTitleLineHeight + (defaultLineHeight * 3));
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(12);
+                    pdf.text('Summarized Notes:', margin, yPos);
+                    yPos += defaultLineHeight;
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFontSize(10);
+                    pdf.setTextColor(120, 53, 15); // Darker brown for Gemini output
+                    const summarizedNotesText = pdf.splitTextToSize(summarizedNotesOutput.innerText.trim(), contentWidth);
+                    pdf.text(summarizedNotesText, margin, yPos);
+                    yPos += (summarizedNotesText.length * defaultLineHeight) + defaultLineHeight * 1.5;
+                    pdf.setTextColor(0, 0, 0); // Reset color
+                }
+
+                // Removed: Action Plan section from PDF generation
+                // Removed: Client Email section from PDF generation
+
+                // --- Verification & Acceptance ---
+                checkPageBreak(sectionTitleLineHeight + (defaultLineHeight * 10)); // Estimate for this section
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(14);
+                pdf.text('Verification & Acceptance', margin, yPos);
+                pdf.line(margin, yPos + 1, 210 - margin, yPos + 1); // Underline
+                yPos += sectionTitleLineHeight;
+
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(10); // Changed to 10pt
+                const confirmationText = "I confirm that all equipment has been installed and tested according to specifications, industry standards, and client requirements, and the system is fully ready for operational deployment.";
+                const splitConfirmation = pdf.splitTextToSize(confirmationText, contentWidth);
+                pdf.text(splitConfirmation, margin, yPos);
+                yPos += (splitConfirmation.length * defaultLineHeight) + defaultLineHeight * 1.5;
+
+                pdf.setFont('helvetica', 'bold');
+                pdf.text(`Engineer Name: ${data.engineerNameSignature}`, margin, yPos); yPos += defaultLineHeight;
+                pdf.setFont('helvetica', 'normal');
+                pdf.text(`Engineer Contact NO: ${data.engineerContactNo || 'N/A'}`, margin, yPos); yPos += defaultLineHeight;
+                pdf.text(`Signature: _________________________`, margin, yPos);
+                yPos += defaultLineHeight * 3; // Increased space for signature
+                pdf.text(`Date: ${data.reportDate}`, margin, yPos); yPos += defaultLineHeight * 2;
+
+                pdf.setFont('helvetica', 'bold');
+                pdf.text(`Client Representative Name: ${data.clientRepresentativeName}`, margin, yPos); yPos += defaultLineHeight;
+                pdf.setFont('helvetica', 'normal');
+                pdf.text(`Client Representative Contact NO: ${data.clientRepresentativeContactNo || 'N/A'}`, margin, yPos); yPos += defaultLineHeight;
+                pdf.text(`Signature: _________________________`, margin, yPos);
+                yPos += defaultLineHeight * 3; // Increased space for signature
+                pdf.text(`Date: ${data.reportDate}`, margin, yPos); yPos += defaultLineHeight * 2;
+
+                // --- Footer ---
+                checkPageBreak(defaultLineHeight * 3); // Ensure footer fits
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(8);
+                pdf.setTextColor(100, 100, 100); // Gray color for footer
+                pdf.line(margin, yPos, 210 - margin, yPos); // Top border for footer
+                yPos += defaultLineHeight;
+                pdf.text(`Document ID: IR-${Date.now()}`, 105, yPos, { align: 'center' }); yPos += defaultLineHeight;
+                pdf.text(`Adima Smart Secure IOT Devices | Thane, Maharashtra 421204`, 105, yPos, { align: 'center' }); yPos += defaultLineHeight;
+                pdf.text(`www.adimasmart.com`, 105, yPos, { align: 'center' });
+
+                pdf.save(`ADIMA_Report_${new Date().toISOString().slice(0,10)}.pdf`);
+
+                pdfLoading.classList.remove('active'); // Hide PDF loading indicator
+                downloadPdfButtonContainer.classList.remove('hidden'); // Show download button again
+                // No need to hide/show form as it's not used for direct PDF rendering anymore
+            });
+        });
+    </script>
+</body>
+</html>
